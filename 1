@@ -1,0 +1,31 @@
+const {
+  dialogflow,
+  Suggestions,
+} = require('actions-on-google');
+
+const app = dialogflow();
+
+// Welcome Intent
+app.intent('Ask About YouTube', (conv) => {
+  conv.ask('Welcome to YouTube chatbot. What can I help you with?');
+  conv.ask(new Suggestions(['Search for videos', 'Subscribe to a channel']));
+});
+
+// Search for videos Intent
+app.intent('Search for videos', (conv, {searchTerm}) => {
+  conv.ask(`I found some videos related to ${searchTerm}. Would you like me to show them to you?`);
+});
+
+// Subscribe to a channel Intent
+app.intent('Subscribe to a channel', (conv, {channelName}) => {
+  conv.ask(`You have successfully subscribed to ${channelName}. Would you like to do something else?`);
+  conv.ask(new Suggestions(['Search for videos', 'Unsubscribe from a channel']));
+});
+
+// Unsubscribe from a channel Intent
+app.intent('Unsubscribe from a channel', (conv, {channelName}) => {
+  conv.ask(`You have successfully unsubscribed from ${channelName}. Is there anything else I can do for you?`);
+  conv.ask(new Suggestions(['Search for videos', 'Subscribe to a channel']));
+});
+
+exports.dialogflowFirebaseFulfillment = app;
